@@ -1,11 +1,21 @@
-# Dsynct
+# Dsync-Transform
 
 ## Quick Start
 
 ```
-# install and start temporal
-brew install temporal
-temporal server start-dev
+touch config.yml
+docker run -v "./config.yml:/config.yml" -p 8085:8085 markadiom/dsync-transform
+```
 
-docker run -p 8080:8080 markadiom/dsynct worker --flow-name myflow /dev/random /dev/null run temporal --host-port host.docker.internal:7233
+## Example Config File
+
+```
+mappings:
+  - namespace: srcnamespace
+    mapnamespace: dstnamespace
+    cel:
+      name: self + "!"
+      newfield: '"abcd"'
+    add: ["newfield"]
+    delete: ["existingfield"]
 ```
