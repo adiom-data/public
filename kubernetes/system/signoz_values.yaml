@@ -1,0 +1,5 @@
+global:
+  storageClass: <PROVIDE_YOUR_STORAGE_CLASS>
+
+clickhouse:
+  installCustomStorageClass: true

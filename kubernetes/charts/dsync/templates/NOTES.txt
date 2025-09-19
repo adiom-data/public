@@ -1,0 +1,17 @@
+{{- if .Values.runWorkflowArgs }}
+Runner service has been deployed!
+
+To access the runner service:
+
+Hostname (within cluster):
+  {{ include "dsync.fullname" . }}-run-svc
+
+Port:
+  {{ .Values.runServicePort | default 8080 }}
+
+To get the ClusterIP address, run:
+  kubectl get svc {{ include "dsync.fullname" . }}-run-svc -o jsonpath='{.spec.clusterIP}'
+
+To get the full service details, run:
+  kubectl get svc {{ include "dsync.fullname" . }}-run-svc
+{{- end }}

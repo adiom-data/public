@@ -1,0 +1,118 @@
+{{- if .Values.workerArgs }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dsync.fullname" . }}
+  labels:
+    app: {{ include "dsync.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "dsync.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "dsync.name" . }}
+    spec:
+      containers:
+        {{- if .Values.cosmos }}
+        - name: cosmos-connector
+          image: markadiom/cosmosnosqlconnector:latest
+          command:
+            - "java"
+            {{- if .Values.cosmos.emulator }}
+            - "-Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts"
+            - "-Djavax.net.ssl.trustStorePassword=changeit"
+            {{- end }}
+            - "-jar"
+            - "/app/app.jar"
+          args:
+            - "8089"
+            - "{{ .Values.cosmos.url }}"
+            - "{{ .Values.cosmos.key }}"
+          env:
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: {{ .Values.env.OTEL_EXPORTER_OTLP_ENDPOINT | quote }}
+          {{- if .Values.cosmos.emulator }}
+          volumeMounts:
+          - name: cacerts-decoded
+            mountPath: /etc/ssl/certs/java/cacerts
+            subPath: cacerts
+          {{- end }}
+        {{- end }}
+        - name: dsync-worker
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            {{- range .Values.workerArgs }}
+            - {{ . | quote }}
+            {{- end }}
+          env:
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          volumeMounts:
+            - name: config-volume
+              mountPath: /mnt/config
+          {{- if .Values.resources }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ include "dsync.fullname" $ }}-config
+        {{- if and .Values.cosmos .Values.cosmos.emulator }}
+        - name: cacerts-decoded
+          emptyDir: {}
+        {{- end }}
+      {{- if and .Values.cosmos .Values.cosmos.emulator }}
+      initContainers:
+        - name: decode-cacerts
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p /cacerts && \
+              base64 -d /config/cacerts.b64 > /cacerts/cacerts
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
+            - name: cacerts-decoded
+              mountPath: /cacerts
+      {{- end }}
+{{- end }}
+{{- if .Values.runWorkflowArgs }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "dsync.fullname" . }}-run
+  labels:
+    app: {{ include "dsync.name" . }}-run
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ include "dsync.name" . }}-run
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: dsync-workflow-runner
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            {{- range .Values.runWorkflowArgs }}
+            - {{ . | quote }}
+            {{- end }}
+          env:
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          ports:
+            - containerPort: 8080
+{{- end }}

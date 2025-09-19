@@ -1,0 +1,8 @@
+mappings:
+  - namespace: ns0
+    delete: ["id"]
+    add: ["_id"]
+    mapid: "id[0]"
+    cel:
+      _id: parent.id
+      val: parent.id

@@ -1,0 +1,42 @@
+# Example: Optional CPU and RAM resources for dsync-worker
+# Uncomment and adjust as needed
+# resources:
+#   requests:
+#     cpu: "500m"
+#     memory: "1Gi"
+#   limits:
+#     cpu: "1"
+#     memory: "2Gi"
+replicaCount: 4
+image:
+  repository: markadiom/dsynct
+  tag: latest
+  pullPolicy: IfNotPresent
+workerArgs:
+  - worker
+  - --flow-name
+  - myflow
+  - /dev/fakesource
+  - /dev/null
+  - temporal
+  - --host-port
+  - temporal-dev:7233
+  - app
+  - --otel
+env:
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://signoz-otel-collector:4317"
+
+# Cosmos connector configuration (optional)
+# To enable the Cosmos connector sidecar, provide both the URL and the KEY.
+# Specify `emulator: true` if connecting to the Cosmos DB Emulator with mTLS.
+# Make sure the pre-generated trust store is in dsync/config_files and base64-encoded
+#
+# curl --insecure "https://<URL>:8081/_explorer/emulator.pem" -o /tmp/emulatorcert.crt
+# keytool -import -trustcacerts -file /tmp/emulatorcert.crt -alias cosmos_cert -keystore /tmp/cacerts -storepass changeit -noprompt
+# base64 -w 0 /tmp/cacerts > dsync/config_files/cacerts.b64
+
+# cosmos:
+#   url: ""
+#   key: ""
+#   emulator: false
+

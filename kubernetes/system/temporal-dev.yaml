@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: temporal-dev-pvc
+spec:
+  storageClassName: <PROVIDE_YOUR_STORAGE_CLASS>
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temporal-dev
+  labels:
+    app: temporal-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: temporal-dev
+  template:
+    metadata:
+      labels:
+        app: temporal-dev
+    spec:
+      containers:
+        - name: temporal-dev
+          image: temporalio/server:latest
+          command: [ "temporal" ]   # override the default CMD
+          args:
+            - "server"
+            - "start-dev"
+            - "--ip"
+            - "0.0.0.0"
+            - "--db-filename"
+            - "/temporal_data/temporal.db"
+          ports:
+            - name: grpc
+              containerPort: 7233
+            - name: web
+              containerPort: 8233
+          volumeMounts:
+            - name: temporal-data
+              mountPath: /temporal_data
+      volumes:
+        - name: temporal-data
+          persistentVolumeClaim:
+            claimName: temporal-dev-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: temporal-dev
+spec:
+  type: ClusterIP
+  selector:
+    app: temporal-dev
+  ports:
+    - name: grpc
+      port: 7233
+      targetPort: 7233
+    - name: web
+      port: 8233
+      targetPort: 8233
+

@@ -1,0 +1,14 @@
+{{- if .Values.runWorkflowArgs }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dsync.fullname" . }}-run-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ include "dsync.name" . }}-run
+  ports:
+    - name: http
+      port: {{ .Values.runServicePort | default 8080 }}
+      targetPort: 8080
+{{- end }}

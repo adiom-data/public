@@ -1,0 +1,20 @@
+image:
+  repository: markadiom/dsynct
+  tag: latest
+  pullPolicy: IfNotPresent
+runWorkflowArgs:
+  - run
+  - --flow-name
+  - myflow
+  - temporal
+  - --host-port
+  - temporal-dev:7233
+  - app 
+  - --otel 
+  - --host-port
+  - 0.0.0.0:8080
+env:
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://signoz-otel-collector:4317"
+
+# Port for the ClusterIP service for the runner
+runServicePort: 8080
