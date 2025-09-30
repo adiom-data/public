@@ -31,7 +31,7 @@ The general way this works is each source document is converted into an internal
 * `wild` - string (default: *) - When specifying a path, this matches anything.
 * `delimiter` - string (default: .) - When specifying a path, this is the delimiter.
 * `env` - map[string, any] - Variables available under the `env` variable in CEL expression mappings.
-* `unwrapbson` - boolean (default: false) - If true, will automatically convert various bson types to a more native type like ObjectIds to strings.
+* `unwrapbson` - boolean (default: false) - If true, will automatically convert various bson types to a more native type like for unwrapping special mongo binary types.
 * `mappings` - list[mapping]
   * `namespace` - string - Namespace this applies to
   * `mapnamespace` - string - New namespace name
