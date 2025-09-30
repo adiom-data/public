@@ -9,6 +9,8 @@ For questions or commercial inquiries, please use send us an email at sales@adio
 ## Issues
 Please file issues/bug reports in the issues section. Please use the appropriate label for the product the issue is about.
 
+If you have questions while evaluating Dsynct, you can find us at our [Discord server](https://discord.gg/r4xzVfMQeU)
+
 ## dsynct
 Please see the dsynct directory for the trial license and quick start instructions.
 
