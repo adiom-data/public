@@ -1,0 +1,46 @@
+# Default values for hbase-connector.
+# This is a YAML-formatted file.
+
+replicaCount: 1
+
+image:
+  repository: alexadiom/hbase-connector
+  pullPolicy: Always
+  tag: "latest"
+
+# Kafka configuration
+kafka:
+  broker: "localhost:9092"
+
+# Zookeeper configuration  
+zookeeper:
+  quorum: "localhost:2181"
+
+# HBase connector specific configuration
+hbaseConnector:
+  peerName: "hbasekafka"
+  enableAsync: true
+  enableEvents: true
+
+# Service configuration
+service:
+  type: ClusterIP
+  ports:
+    - name: hbase-master
+      port: 16000
+      targetPort: 16000
+    - name: hbase-regionserver
+      port: 16020
+      targetPort: 16020
+
+# Resources
+resources: {}
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# Affinity
+affinity: {}

@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "hbase-connector.fullname" . }}
+  labels:
+    {{- include "hbase-connector.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  serviceName: {{ include "hbase-connector.fullname" . }}
+  selector:
+    matchLabels:
+      {{- include "hbase-connector.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "hbase-connector.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["hbase-connectors"]
+          args:
+            - "kafkaproxy"
+            {{- if .Values.hbaseConnector.enableAsync }}
+            - "-a"
+            {{- end }}
+            {{- if .Values.hbaseConnector.enableEvents }}
+            - "-e"
+            {{- end }}
+            - "-b"
+            - "{{ .Values.kafka.broker }}"
+            - "-p"
+            - "{{ .Values.hbaseConnector.peerName }}"
+          env:
+            - name: HBASE_CONF_DIR
+              value: "/opt/hbase-connectors/conf"
+          volumeMounts:
+            - name: config
+              mountPath: /opt/hbase-connectors/conf
+              readOnly: true
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "hbase-connector.fullname" . }}-config
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
