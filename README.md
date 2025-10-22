@@ -1,4 +1,4 @@
-# Adiom Dsync Enterprise - Public Repo
+# Adiom Dsync Enterprise - Public Repo (HBase Public Preview)
 
 This repository contains instructions for running the Enterprise version of [dsync](https://github.com/adiom-data/dsync/), our Open Source database replication and migration tool. The Enterprise version (dsync**t**) enables horizontal scalability, flexibility, and additional observability beyond what regular dsync offers. It is distributed under a Commercial License in a docker container form. 
 
