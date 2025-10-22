@@ -7,20 +7,23 @@
 #   limits:
 #     cpu: "1"
 #     memory: "2Gi"
-replicaCount: 4
+replicaCount: 2
 image:
-  repository: markadiom/dsynct
+  repository: alexadiom/dsynct-hbase-preview
   tag: latest
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 workerArgs:
   - worker
-  - --flow-name
-  - myflow
-  - /dev/fakesource
-  - /dev/null
+  - --flow-name=myflow
+  - --mapping-delimiter=|
+  - --namespace-mapping=default:table1|test.table1,default:table2|test.table2,ns1:table3|test.table3
+  - hbase://<ZK1>
+  - --kafka-brokers=<KAFKA_BROKER>:9092
+  - --kafka-topics=<KAFKA_TOPIC>
+  - --mappings-file=/mnt/config/demo_mappings.yml
+  - mongodb://<MONGO_CONN_STRING>/
   - temporal
-  - --host-port
-  - temporal-dev:7233
+  - --host-port=temporal-dev:7233
   - app
   - --otel
 env:

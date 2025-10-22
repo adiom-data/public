@@ -1,0 +1,10 @@
+mappings:
+  - hbase: "default:table1"
+    encoding: json
+    root: cf1:column
+  - hbase: "default:table2"
+    encoding: hbase
+    root: cf2
+  - hbase: "ns1:table3"
+    encoding: hbase
+    root: cf3

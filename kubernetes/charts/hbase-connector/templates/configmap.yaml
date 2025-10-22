@@ -20,6 +20,7 @@ data:
   kafka-route-rules.xml: |
     <rules>
       <rule action="route" table="default:table" topic="test-topic" />
+      <rule action="route" topic="test-topic" />
     </rules>
   kafka.properties: |
     bootstrap.servers={{ .Values.kafka.broker }}

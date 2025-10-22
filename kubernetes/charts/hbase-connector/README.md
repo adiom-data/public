@@ -39,6 +39,23 @@ helm install -n hbase my-hbase-connector ./hbase-connector \
   --set zookeeper.quorum="zookeeper-headless"
 ```
 
+## Enabling Replication in HBase
+
+* ensure hbase-site.xml has replication:true
+* for all tables and column familes that need to be replicated, set REPLICATION_SCOPE to 1
+* add_peer 'hbasekafka','SECOND_ZOOKEEPER:2181:/kafkaproxy'
+* list_peers
+* status 'replication'
+
+Our command:
+```
+add_peer 'hbasekafka','zookeeper-headless:2181:/kafkaproxy'
+```
+For HBase-2 the syntax is a bit different:
+```
+add_peer 'hbasekafka',CLUSTER_KEY=>'zookeeper-headless:2181:/kafkaproxy'
+```
+
 ## Docker Command
 
 The connector runs with the following command:

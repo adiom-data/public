@@ -1,18 +1,19 @@
 image:
-  repository: markadiom/dsynct
+  repository: alexadiom/dsynct-hbase-preview
   tag: latest
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 runWorkflowArgs:
   - run
-  - --flow-name
-  - myflow
+  - --flow-name=myflow
+  - --workflow-id=HBASE_TO_MONGO_DEMO
+  - --namespace=default:table1,default:table2,ns1:table3
+  - --progress-check-interval=10s
+  - --progress-publish-interval=10s
   - temporal
-  - --host-port
-  - temporal-dev:7233
-  - app 
-  - --otel 
-  - --host-port
-  - 0.0.0.0:8080
+  - --host-port=temporal-dev:7233
+  - app
+  - --otel
+  - --host-port=0.0.0.0:8080
 env:
   OTEL_EXPORTER_OTLP_ENDPOINT: "http://signoz-otel-collector:4317"
 
