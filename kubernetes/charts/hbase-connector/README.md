@@ -1,6 +1,20 @@
 # HBase Connector Helm Chart
 
-This Helm chart deploys the HBase Kafka Connector as a StatefulSet with 1 replica.
+This Helm chart deploys the HBase Kafka Connector as a StatefulSet with 1 replica. 
+
+## Networking
+
+The source HBase cluster (specifically, Region Servers), need to be able to directly connect to the HBase Kafka Connector. In cases where the source HBase cluster is deployed in a different environment that can't access internal Kubernetes hostnames, the HBase Kafka Connector can be configured with a specific hostname in hbase-site.xml (see templates/configmap.yaml):
+```
+    <property>
+    <name>hbase.regionserver.hostname</name>
+    <value>MY_EXTERNAL_HOSTNAME</value>
+    </property>
+    <property>
+    <name>hbase.unsafe.regionserver.hostname</name>
+    <value>MY_EXTERNAL_HOSTNAME</value>
+    </property>
+```
 
 ## Configuration
 
