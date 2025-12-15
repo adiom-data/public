@@ -7,14 +7,19 @@ This Helm chart deploys the HBase Kafka Connector as a StatefulSet with 1 replic
 The source HBase cluster (specifically, Region Servers), need to be able to directly connect to the HBase Kafka Connector. In cases where the source HBase cluster is deployed in a different environment that can't access internal Kubernetes hostnames, the HBase Kafka Connector can be configured with a specific hostname in hbase-site.xml (see templates/configmap.yaml):
 ```
     <property>
-    <name>hbase.regionserver.hostname</name>
-    <value>MY_EXTERNAL_HOSTNAME</value>
+        <name>hbase.regionserver.hostname</name>
+        <value>MY_EXTERNAL_HOSTNAME</value>
     </property>
     <property>
-    <name>hbase.unsafe.regionserver.hostname</name>
-    <value>MY_EXTERNAL_HOSTNAME</value>
+        <name>hbase.unsafe.regionserver.hostname</name>
+        <value>MY_EXTERNAL_HOSTNAME</value>
+    </property>
+    <property>
+        <name>hbase.regionserver.ipc.address</name>
+        <value>0.0.0.0</value>
     </property>
 ```
+The `hbase.regionserver.ipc.address` parameter is the bind address. Note that the MY_EXTERNAL_HOSTNAME should be resolvable from the pod. If it isn't on startup, then you can alias it to 127.0.0.1.
 
 ## Configuration
 
