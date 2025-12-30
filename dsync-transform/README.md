@@ -62,3 +62,19 @@ For use with the `map` configuration or inside a `cel` configuration expression.
 * `bson_uuid` - Converts a UUID string to a BSON UUID.
 * `bson_object_id_string` - Converts BSON ObjectID to a string.
 * `bson_uuid_string` - Converts BSON UUID to a string.
+* `md5` - Applies the MD5 hash to a string or bytes returning bytes.
+* `sha1` - Applies the SHA-1 hash to a string or bytes returning bytes.
+* `sha256` - Applies the SHA-256 hash to a string or bytes returning bytes.
+
+## Available Functions
+
+All the available mappings are usable as unary functions, however here are additional non-unary ones:
+
+* `now_millis()` - Current time in milliseconds
+* `now_nanos()` - Current time in nanoseconds (resolution may be limited by your machine)
+* `uuid_v4_bytes()` - Generate a random UUID as bytes
+* `uuid_v4_string()` - Generate a random UUID as a string
+* `uuid_v3_bytes(uuid, name)` - Generate a deterministic UUID based on a UUID namespace and name as bytes (MD5)
+* `uuid_v3_string(uuid, name)` - Generate a deterministic UUID based on a UUID namespace and name as a string (MD5)
+* `uuid_v5_bytes(uuid, name)` - Generate a deterministic UUID based on a UUID namespace and name as bytes (SHA-1)
+* `uuid_v5_string(uuid, name)` - Generate a deterministic UUID based on a UUID namespace and name as a string (SHA-1)
