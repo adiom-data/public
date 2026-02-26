@@ -13,9 +13,9 @@ docker run -p 8080:8080 markadiom/dsynct worker /dev/random /dev/null run app --
 Run multiple workers:
 ```
 # Repeat this for the desired number of workers
-docker run markadiom/dsynct worker --flow-name myflow /dev/random /dev/null temporal --host-port host.docker.internal:7233
+docker run markadiom/dsynct worker /dev/random /dev/null temporal --host-port host.docker.internal:7233
 # Run command
-docker run -p 8080:8080 markadiom/dsynct run --flow-name myflow app --host-port 0.0.0.0:8080 temporal --host-port host.docker.internal:7233
+docker run -p 8080:8080 markadiom/dsynct run app --host-port 0.0.0.0:8080 temporal --host-port host.docker.internal:7233
 ```
 
 Run with built in dsync-transform passing in `config.yml` as the transform config:

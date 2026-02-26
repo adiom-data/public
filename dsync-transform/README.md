@@ -4,7 +4,7 @@
 
 ```
 touch config.yml
-docker run -v "./config.yml:/config.yml" -p 8085:8085 markadiom/dsync-transform
+docker run -v "./config.yml:/config.yml" -e "DSYNCT_MODE=simple" -p 8085:8085 markadiom/dsynct transformer
 ```
 
 ## Example Config File
@@ -47,6 +47,7 @@ The general way this works is each source document is converted into an internal
   * `self` - CEL string - An expression that serves as a mapping for the whole document.
 * `defaultmapping` - string - Name (namespace) of the mapping from `mappings` to use as a fallback.
 * `namespacemapper` - CEL string - Default expression to automatically map all namespaces. Has `env`, `self` (namespace).
+* `idlist` - boolean (default: false) - If true, the `id` variable will always be a list. When false, the `id` variable contains the first id value if it is the only id value.
 
 ## Available Mappings
 
@@ -58,6 +59,7 @@ For use with the `map` configuration or inside a `cel` configuration expression.
 * `json_decode` - Decodes a JSON string or bytes into an object.
 * `json_encode` - Encodes an object as a JSON string.
 * `bson_decimal128` - Converts a string to a BSON Decimal128.
+* `bson_decimal128_string` - Converts a BSON Decimal128 to a string.
 * `bson_object_id` - Converts a string to a BSON ObjectID. Should use in `map` only.
 * `bson_uuid` - Converts a UUID string to a BSON UUID.
 * `bson_object_id_string` - Converts BSON ObjectID to a string.
@@ -65,6 +67,14 @@ For use with the `map` configuration or inside a `cel` configuration expression.
 * `md5` - Applies the MD5 hash to a string or bytes returning bytes.
 * `sha1` - Applies the SHA-1 hash to a string or bytes returning bytes.
 * `sha256` - Applies the SHA-256 hash to a string or bytes returning bytes.
+
+### Byte mappings
+
+* `be_to_int32` - Converts bytes to an int assuming a big endian format. Use in a `map` to get an int32.
+* `be_to_int64` - Converts bytes to an int64 assuming a big endian format.
+* `to_be_int32` - Converts data into bytes representing an int32 in big endian format.
+* `to_be_int64` - Converts data into bytes representing an int64 in big endian format.
+* `reverse_bytes` - Reverses a byte array.
 
 ## Available Functions
 
