@@ -4,7 +4,7 @@
 
 ```
 touch config.yml
-docker run -v "./config.yml:/config.yml" -e "DSYNCT_MODE=simple" -p 8085:8085 markadiom/dsynct transformer
+docker run -v "./config.yml:/config.yml" -e "DSYNCT_MODE=simple" -p 8085:8085 markadiom/dsynct --host-port=0.0.0.0:8085 transformer
 ```
 
 ## Example Config File
