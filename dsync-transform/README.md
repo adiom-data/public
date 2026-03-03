@@ -88,3 +88,24 @@ All the available mappings are usable as unary functions, however here are addit
 * `uuid_v3_string(uuid, name)` - Generate a deterministic UUID based on a UUID namespace and name as a string (MD5)
 * `uuid_v5_bytes(uuid, name)` - Generate a deterministic UUID based on a UUID namespace and name as bytes (SHA-1)
 * `uuid_v5_string(uuid, name)` - Generate a deterministic UUID based on a UUID namespace and name as a string (SHA-1)
+
+### Fake Data Generation
+
+Generate deterministic fake data seeded by the input value. The same seed always produces the same output, making these suitable for consistent data anonymization. Numeric types are used directly as seeds; other types (strings, etc.) are hashed to derive a seed.
+
+* `fake_name(seed)` - Generate a fake full name
+* `fake_first_name(seed)` - Generate a fake first name
+* `fake_last_name(seed)` - Generate a fake last name
+* `fake_email(seed)` - Generate a fake email address
+* `fake_phone(seed)` - Generate a fake phone number
+* `fake_address(seed)` - Generate a fake street address
+* `fake_city(seed)` - Generate a fake city name
+* `fake_state(seed)` - Generate a fake state name
+* `fake_zip(seed)` - Generate a fake postal code
+* `fake_country(seed)` - Generate a fake country name
+* `fake_company(seed)` - Generate a fake company name
+* `fake_username(seed)` - Generate a fake username
+* `fake_ipv4(seed)` - Generate a fake IPv4 address
+* `fake_sentence(seed)` - Generate a fake sentence
+* `fake_word(seed)` - Generate a fake word
+* `fake_url(seed)` - Generate a fake URL
